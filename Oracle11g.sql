@@ -13,7 +13,7 @@ DECLARE @TableName NVARCHAR(255);
 DECLARE @NullFields NVARCHAR(MAX);
 DECLARE @ManualColumnNotFound INT = 0; 
 DECLARE @DataLineageTestFailed INT = 0;
-DECLARE @DatabaseId INT = 3 -- Declare database_id from dbo.databases appropriate to tested documentation
+DECLARE @DatabaseId INT = 2 -- Declare database_id from dbo.databases appropriate to tested documentation
 
 -- Module for databases table
 
@@ -50,7 +50,7 @@ DECLARE ObjectCursor CURSOR FOR
 SELECT [table_id], [name], [object_type]
 FROM [dataedo_meta_upgrade_cs].[dbo].[tables]
 WHERE [database_id] = @DatabaseId 
-  AND [table_id] IN (251, 298); -- Declare table_id(s) from dbo.tables appropriate to tested documentation
+  AND [table_id] IN (37, 219); -- Declare table_id(s) from dbo.tables appropriate to tested documentation
 
 -- Loop through tables using a cursor
 -- Fetch next table details
@@ -99,7 +99,7 @@ DECLARE ProcedureCursor CURSOR FOR
 SELECT [procedure_id], [name], [object_type]
 FROM [dataedo_meta_upgrade_cs].[dbo].[procedures]
 WHERE [database_id] = @DatabaseId
-  AND [procedure_id] IN (86, 90); -- Declare procedure_id(s) from dbo.procedures appropriate to tested documentation
+  AND [procedure_id] IN (37, 49); -- Declare procedure_id(s) from dbo.procedures appropriate to tested documentation
 
 -- Loop through procedures using a cursor
 -- Fetch next procedure details
@@ -145,7 +145,7 @@ DEALLOCATE ProcedureCursor;
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[glossary_mappings]
-    WHERE [object_id] = 251 -- Declare object_id from (most likely) dbo.tables appropriate to tested documentation
+    WHERE [object_id] = 37 -- Declare object_id from (most likely) dbo.tables appropriate to tested documentation
 )
 BEGIN
     PRINT 'Expected link between database object and term found - test passed';
@@ -173,9 +173,9 @@ SELECT TOP 1
     @Source = [source],
     @Status = [status]
 FROM [dataedo_meta_upgrade_cs].[dbo].[tables_relations]
-WHERE [table_relation_id] = 501 -- Declare appropriate ids from dbo.tables_relations appropriate to tested documentation
-    AND [pk_table_id] = 298
-    AND [fk_table_id] = 251
+WHERE [table_relation_id] = 499 -- Declare appropriate ids from dbo.tables_relations appropriate to tested documentation
+    AND [pk_table_id] = 58
+    AND [fk_table_id] = 37
     AND [source] = 'USER'
     AND [status] = 'A';
  
@@ -197,8 +197,8 @@ SET @NullFields = '';
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[unique_constraints]
-    WHERE [unique_constraint_id] = 641 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
-    AND [table_id] = 251 -- Declare appropriate table_id from dbo.tables appropriate to tested documentation (object that has keys added)
+    WHERE [unique_constraint_id] = 639 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
+    AND [table_id] = 37 -- Declare appropriate table_id from dbo.tables appropriate to tested documentation (object that has keys added)
     AND [source] = 'USER'
     AND [primary_key] = 1
     AND [status] = 'A'
@@ -215,8 +215,8 @@ END
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[unique_constraints]
-    WHERE [unique_constraint_id] = 642 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
-    AND [table_id] = 251 -- Declare appropriate table_id from dbo.tables appropriate to tested documentation (object that has keys added)
+    WHERE [unique_constraint_id] = 640 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
+    AND [table_id] = 37 -- Declare appropriate table_id from dbo.tables appropriate to tested documentation (object that has keys added)
     AND [source] = 'USER'
     AND [primary_key] = 0
     AND [status] = 'A'
@@ -231,8 +231,8 @@ BEGIN
 END
 
 -- Columnes module
-DECLARE @ColumnId INT = 2059; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
-DECLARE @tableColumnId INT = 251; -- Declare appropriate table_id from dbo.tables appropriate to tested documentation
+DECLARE @ColumnId INT = 422; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
+DECLARE @tableColumnId INT = 37; -- Declare appropriate table_id from dbo.tables appropriate to tested documentation
 DECLARE @TitleIsNull INT;
 DECLARE @DescriptionIsNull INT;
 
@@ -330,13 +330,13 @@ BEGIN
 END
 
 -- Module for Data lineage
-DECLARE @LineageProcessId INT = 373; -- Declare appropriate process_id from dbo.data_processes appropriate to tested documentation (search by plain_description)
-DECLARE @ProcessorId INT = 251; -- Declare appropriate processor_id from dbo.data_processes appropriate to tested documentation
+DECLARE @LineageProcessId INT = 369; -- Declare appropriate process_id from dbo.data_processes appropriate to tested documentation (search by plain_description)
+DECLARE @ProcessorId INT = 37; -- Declare appropriate processor_id from dbo.data_processes appropriate to tested documentation
 DECLARE @ExpectedProcessorName NVARCHAR(255) = 'Regression';
 DECLARE @ObjectFlowId1 INT = 974; -- Declare appropriate object_id from dbo.data_flows appropriate to tested documentation
 DECLARE @ObjectFlowId2 INT = 496; -- Declare appropriate object_id from dbo.data_flows appropriate to tested documentation
-DECLARE @InflowId INT = 1035; -- Declare appropriate inflow_id from dbo.data_flows appropriate to tested documentation
-DECLARE @OutflowId INT = 1036; -- Declare appropriate outflow_id from dbo.data_flows appropriate to tested documentation
+DECLARE @InflowId INT = 1348; -- Declare appropriate inflow_id from dbo.data_flows appropriate to tested documentation
+DECLARE @OutflowId INT = 1349; -- Declare appropriate outflow_id from dbo.data_flows appropriate to tested documentation
 
 -- Check if the lineage process exists in [data_processes]
 -- Display appropriate messages based on the existence of the process
