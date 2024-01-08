@@ -1,6 +1,5 @@
 --Assertions for Oracle23c documentation to perform after repository upgrade and importing changes
 
-DECLARE @DatabaseTitle NVARCHAR(255);
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
