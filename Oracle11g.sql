@@ -229,7 +229,7 @@ BEGIN
     SET @UnexpectedNulls = @UnexpectedNulls + 1;
 END
 
--- Columnes module
+-- Columns module
 DECLARE @ColumnId INT = 422; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
 DECLARE @tableColumnId INT = 37; -- Declare appropriate table_id from dbo.tables appropriate to tested documentation
 DECLARE @TitleIsNull INT;

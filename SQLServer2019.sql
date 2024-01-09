@@ -1,34 +1,36 @@
---Assertions for Oracle23c documentation to perform after repository upgrade and importing changes
+--Assertions for SQL Server 2019 documentation to perform after repository upgrade and importing changes
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
 DECLARE @ObjectId INT;
-DECLARE @ObjectName NVARCHAR(255); 
+DECLARE @ObjectName NVARCHAR(255);
 DECLARE @ObjectType NVARCHAR(255);
 DECLARE @UnexpectedNulls INT = 0;
-DECLARE @ColumnName NVARCHAR(255);
+DECLARE @ColumnName NVARCHAR(255); 
 DECLARE @TableName NVARCHAR(255);
 DECLARE @NullFields NVARCHAR(MAX);
 DECLARE @ManualColumnNotFound INT = 0; 
 DECLARE @DataLineageTestFailed INT = 0;
-DECLARE @DatabaseId INT = 3 -- Declare database_id from dbo.databases appropriate to tested documentation
+DECLARE @DatabaseId INT = 1 -- Declare database_id from dbo.databases appropriate to tested documentation
 
 -- Module for databases table
 
 -- Check if the specified database exists
 IF EXISTS (SELECT 1 FROM [dataedo_meta_upgrade_cs].[dbo].[databases] WHERE [database_id] = @DatabaseId)
 BEGIN
+ 
     SET @DatabaseNullFields = '';
-
+ 
     IF EXISTS (SELECT 1 FROM [dataedo_meta_upgrade_cs].[dbo].[databases] WHERE [database_id] = @DatabaseId AND [description] IS NULL)
         SET @DatabaseNullFields = @DatabaseNullFields + 'Description, ';
     IF EXISTS (SELECT 1 FROM [dataedo_meta_upgrade_cs].[dbo].[databases] WHERE [database_id] = @DatabaseId AND [description_plain] IS NULL)
         SET @DatabaseNullFields = @DatabaseNullFields + 'Description_plain, ';
     IF EXISTS (SELECT 1 FROM [dataedo_meta_upgrade_cs].[dbo].[databases] WHERE [database_id] = @DatabaseId AND [description_search] IS NULL)
         SET @DatabaseNullFields = @DatabaseNullFields + 'Description_search, ';
-		 
-	-- Check if unexpected NULL values are found for database description
+ 
+ 	-- Check if unexpected NULL values are found for database description
+
     IF LEN(@DatabaseNullFields) > 0
     BEGIN
         SET @DatabaseNullFields = LEFT(@DatabaseNullFields, LEN(@DatabaseNullFields) - 1);
@@ -43,7 +45,7 @@ ELSE
 BEGIN
     PRINT 'Specified database does not exist - TEST FAILED';
 END
-
+ 
 -- Module for tables table
 DECLARE ObjectCursor CURSOR FOR
 SELECT [table_id], [name], [object_type]
@@ -54,14 +56,15 @@ WHERE [database_id] = @DatabaseId
 -- Loop through tables using a cursor
 -- Fetch next table details
 -- Check for NULL values in title and description fields
--- Display appropriate messages based on NULL checks
+-- Display appropriate messages based on NULL checks 
 OPEN ObjectCursor;
 FETCH NEXT FROM ObjectCursor INTO @ObjectId, @ObjectName, @ObjectType;
-
+ 
 WHILE @@FETCH_STATUS = 0
 BEGIN
     SET @TableNullFields = '';
     SET @UnexpectedNullFields = '';
+
  
     IF EXISTS (SELECT 1 FROM [dataedo_meta_upgrade_cs].[dbo].[tables] WHERE [table_id] = @ObjectId AND [title] IS NULL)
         SET @TableNullFields = @TableNullFields + 'Title, ';
@@ -81,10 +84,10 @@ BEGIN
     BEGIN
         PRINT 'No unexpected NULL values found for ' + @ObjectName + ' (' + @ObjectType + ') - test passed';
     END
-
+ 
     FETCH NEXT FROM ObjectCursor INTO @ObjectId, @ObjectName, @ObjectType;
 END
-
+ 
 CLOSE ObjectCursor;
 DEALLOCATE ObjectCursor;
  
@@ -93,12 +96,12 @@ DECLARE @ProcedureObjectId INT;
 DECLARE @ProcedureObjectName NVARCHAR(255);
 DECLARE @ProcedureObjectType NVARCHAR(255);
 DECLARE @ProcedureNullFields NVARCHAR(MAX);
-
+ 
 DECLARE ProcedureCursor CURSOR FOR
 SELECT [procedure_id], [name], [object_type]
 FROM [dataedo_meta_upgrade_cs].[dbo].[procedures]
 WHERE [database_id] = @DatabaseId
-  AND [procedure_id] IN (86, 90); -- Declare procedure_id(s) from dbo.procedures appropriate to tested documentation
+  AND [procedure_id] IN (8); -- Declare procedure_id(s) from dbo.procedures appropriate to tested documentation
 
 -- Loop through procedures using a cursor
 -- Fetch next procedure details
@@ -107,11 +110,12 @@ WHERE [database_id] = @DatabaseId
 
 OPEN ProcedureCursor;
 FETCH NEXT FROM ProcedureCursor INTO @ProcedureObjectId, @ProcedureObjectName, @ProcedureObjectType;
-
+ 
 SET @ProcedureNullFields = '';
-
+ 
 WHILE @@FETCH_STATUS = 0
 BEGIN
+ 
     IF EXISTS (SELECT 1 FROM [dataedo_meta_upgrade_cs].[dbo].[procedures] WHERE [procedure_id] = @ProcedureObjectId AND [title] IS NULL)
         SET @ProcedureNullFields = @ProcedureNullFields + 'Title, ';
     IF EXISTS (SELECT 1 FROM [dataedo_meta_upgrade_cs].[dbo].[procedures] WHERE [procedure_id] = @ProcedureObjectId AND [description] IS NULL)
@@ -120,7 +124,7 @@ BEGIN
         SET @ProcedureNullFields = @ProcedureNullFields + 'Description_plain, ';
     IF EXISTS (SELECT 1 FROM [dataedo_meta_upgrade_cs].[dbo].[procedures] WHERE [procedure_id] = @ProcedureObjectId AND [description_search] IS NULL)
         SET @ProcedureNullFields = @ProcedureNullFields + 'Description_search, ';
-
+ 
     IF LEN(@ProcedureNullFields) > 0
     BEGIN
         PRINT 'Unexpected NULL values found for ' + @ProcedureObjectName + ' (' + @ProcedureObjectType + ') in field(s): ' + @ProcedureNullFields + ' - TEST FAILED';
@@ -133,7 +137,7 @@ BEGIN
 
     FETCH NEXT FROM ProcedureCursor INTO @ProcedureObjectId, @ProcedureObjectName, @ProcedureObjectType;
 END
-
+ 
 CLOSE ProcedureCursor;
 DEALLOCATE ProcedureCursor;
  
@@ -144,7 +148,7 @@ DEALLOCATE ProcedureCursor;
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[glossary_mappings]
-    WHERE [object_id] = 251 -- Declare object_id from (most likely) dbo.tables appropriate to tested documentation
+    WHERE [object_id] = 2 -- Declare object_id from (most likely) dbo.tables appropriate to tested documentation
 )
 BEGIN
     PRINT 'Expected link between database object and term found - test passed';
@@ -164,7 +168,6 @@ DECLARE @Status NVARCHAR(1);
  
 -- Check if there is a specific row in tables_relations with specified criteria
 -- Display appropriate messages based on the existence of the row
-
 SELECT TOP 1
     @TableRelationId = [table_relation_id],
     @PkTableId = [pk_table_id],
@@ -172,9 +175,9 @@ SELECT TOP 1
     @Source = [source],
     @Status = [status]
 FROM [dataedo_meta_upgrade_cs].[dbo].[tables_relations]
-WHERE [table_relation_id] = 501 -- Declare appropriate ids from dbo.tables_relations appropriate to tested documentation
-    AND [pk_table_id] = 298
-    AND [fk_table_id] = 251
+WHERE [table_relation_id] = 529 -- Declare appropriate ids from dbo.tables_relations appropriate to tested documentation
+    AND [pk_table_id] = 3
+    AND [fk_table_id] = 2
     AND [source] = 'USER'
     AND [status] = 'A';
  
@@ -192,12 +195,12 @@ SET @NullFields = '';
 
 -- Check for expected primary and unique keys in the unique_constraints table
 -- Display appropriate messages based on the existence of the keys
- 
+
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[unique_constraints]
-    WHERE [unique_constraint_id] = 641 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
-    AND [table_id] = 251 -- Declare appropriate table_id from dbo.tables appropriate to tested documentation (object that has keys added)
+    WHERE [unique_constraint_id] = 657 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
+    AND [table_id] = 2 -- Declare appropriate table_id from dbo.tables appropriate to tested documentation (object that has keys added)
     AND [source] = 'USER'
     AND [primary_key] = 1
     AND [status] = 'A'
@@ -214,8 +217,8 @@ END
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[unique_constraints]
-    WHERE [unique_constraint_id] = 642 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
-    AND [table_id] = 251 -- Declare appropriate table_id from dbo.tables appropriate to tested documentation (object that has keys added)
+    WHERE [unique_constraint_id] = 658
+    AND [table_id] = 2
     AND [source] = 'USER'
     AND [primary_key] = 0
     AND [status] = 'A'
@@ -228,10 +231,10 @@ BEGIN
     PRINT 'Expected unique key not found - TEST FAILED';
     SET @UnexpectedNulls = @UnexpectedNulls + 1;
 END
-
+ 
 -- Columns module
-DECLARE @ColumnId INT = 2059; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
-DECLARE @tableColumnId INT = 251; -- Declare appropriate table_id from dbo.tables appropriate to tested documentation
+DECLARE @ColumnId INT = 3; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
+DECLARE @tableColumnId INT = 2; -- Declare appropriate table_id from dbo.tables appropriate to tested documentation
 DECLARE @TitleIsNull INT;
 DECLARE @DescriptionIsNull INT;
 
@@ -254,8 +257,8 @@ BEGIN
     FROM [dataedo_meta_upgrade_cs].[dbo].[columns] C
     JOIN [dataedo_meta_upgrade_cs].[dbo].[tables] T ON C.[table_id] = T.[table_id]
     WHERE C.[column_id] = @ColumnId;
-
-    -- Check for NULL values in [title] and [description]
+ 
+       -- Check for NULL values in [title] and [description]
     IF @TitleIsNull = 1 OR @DescriptionIsNull = 1
     BEGIN
         -- Check for NULL in [title]
@@ -283,9 +286,9 @@ BEGIN
         -- If both [title] and [description] are not NULL
         PRINT 'Expected description and title of a column found - test passed';
     END
-
+ 
     -- Check for lookup_id = 1
-    IF EXISTS (
+     IF EXISTS (
         SELECT 1
         FROM [dataedo_meta_upgrade_cs].[dbo].[columns] C
         WHERE C.[column_id] = @ColumnId
@@ -307,12 +310,13 @@ BEGIN
     -- If the initial conditions are not met
     PRINT 'Row not found in columns with specified criteria - TEST FAILED';
 END
-
+ 
 -- Check if there is a row with specific conditions in columns table for user-made column
 -- Display appropriate messages based on the existence of the manual column
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[columns] C
+							   
     WHERE  C.[table_id] = @tableColumnId
       AND C.[status] = 'A'
       AND C.[source] = 'USER'
@@ -327,15 +331,16 @@ BEGIN
     PRINT 'Row not found for manual column with specified criteria - TEST FAILED';
     SET @ManualColumnNotFound = 1;
 END
-
--- Module for Data lineage
-DECLARE @LineageProcessId INT = 373; -- Declare appropriate process_id from dbo.data_processes appropriate to tested documentation (search by plain_description)
-DECLARE @ProcessorId INT = 251; -- Declare appropriate processor_id from dbo.data_processes appropriate to tested documentation
+ 
+--Module for Data lineage 
+ 
+DECLARE @LineageProcessId INT = 391; -- Declare appropriate process_id from dbo.data_processes appropriate to tested documentation (search by plain_description)
+DECLARE @ProcessorId INT = 2; -- Declare appropriate processor_id from dbo.data_processes appropriate to tested documentation						 
 DECLARE @ExpectedProcessorName NVARCHAR(255) = 'Regression';
 DECLARE @ObjectFlowId1 INT = 974; -- Declare appropriate object_id from dbo.data_flows appropriate to tested documentation
 DECLARE @ObjectFlowId2 INT = 496; -- Declare appropriate object_id from dbo.data_flows appropriate to tested documentation
-DECLARE @InflowId INT = 1035; -- Declare appropriate inflow_id from dbo.data_flows appropriate to tested documentation
-DECLARE @OutflowId INT = 1036; -- Declare appropriate outflow_id from dbo.data_flows appropriate to tested documentation
+DECLARE @InflowId INT = 680; -- Declare appropriate inflow_id from dbo.data_flows appropriate to tested documentation
+DECLARE @OutflowId INT = 681; -- Declare appropriate outflow_id from dbo.data_flows appropriate to tested documentation
 
 -- Check if the lineage process exists in [data_processes]
 -- Display appropriate messages based on the existence of the process
@@ -407,6 +412,7 @@ ELSE
 BEGIN
     PRINT 'Expected lineage process not found - TEST FAILED';
     SET @DataLineageTestFailed = 1;
+
 END
 
 -- Final message
@@ -419,4 +425,6 @@ END
 ELSE
 BEGIN
     PRINT 'Some tests failed. Please review the output for details.';
+							  
 END
+
