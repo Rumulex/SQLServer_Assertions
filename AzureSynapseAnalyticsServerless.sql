@@ -33,7 +33,8 @@ BEGIN
     BEGIN
         SET @DatabaseNullFields = LEFT(@DatabaseNullFields, LEN(@DatabaseNullFields) - 1);
         PRINT 'Unexpected NULL values found for database description in field(s): ' + @DatabaseNullFields + ' - TEST FAILED';
-    END
+		SET @UnexpectedNulls = @UnexpectedNulls + 1;
+	END
     ELSE
     BEGIN
         PRINT 'No unexpected NULL values found for database description - test passed';
@@ -185,6 +186,7 @@ DECLARE @ColumnId INT = 12371; -- Declare appropriate column_id from dbo.columns
 DECLARE @tableColumnId INT = 1122; -- Declare appropriate table_id from dbo.tables appropriate to tested documentation
 DECLARE @TitleIsNull INT;
 DECLARE @DescriptionIsNull INT;
+DECLARE @UnexpectedNullFieldsFound INT;
 
 -- Check if there is a row with specific conditions in columns table for column_id = @ColumnId
 -- Display appropriate messages based on NULL checks and lookup_id
@@ -209,6 +211,7 @@ BEGIN
     -- Check for NULL values in [title] and [description]
     IF @TitleIsNull = 1 OR @DescriptionIsNull = 1
     BEGIN
+        SET @UnexpectedNullFieldsFound = 1
         -- Check for NULL in [title]
         IF @TitleIsNull = 1
             SET @UnexpectedNullFields = @UnexpectedNullFields + 'Title, ';
@@ -231,6 +234,7 @@ BEGIN
     END
     ELSE
     BEGIN
+        SET @UnexpectedNullFieldsFound = 0
         -- If both [title] and [description] are not NULL
         PRINT 'Expected description and title of a column found - test passed';
     END
@@ -363,7 +367,7 @@ END
 -- Final message
 -- Display a final message based on the results of all the tests
 
-IF @UnexpectedNulls = 0 AND @ManualColumnNotFound = 0 AND @DataLineageTestFailed = 0
+IF @UnexpectedNulls = 0 AND @ManualColumnNotFound = 0 AND @DataLineageTestFailed = 0 AND @UnexpectedNullFieldsFound = 0
 BEGIN
     PRINT 'All tests passed successfully!';
 END
