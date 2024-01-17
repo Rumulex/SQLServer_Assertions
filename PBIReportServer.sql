@@ -1,4 +1,4 @@
---Assertions for Power BI documentation to perform after repository upgrade and importing changes
+--Assertions for Power BI Report Server documentation to perform after repository upgrade and importing changes
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
@@ -12,8 +12,8 @@ DECLARE @TableName NVARCHAR(255);
 DECLARE @NullFields NVARCHAR(MAX);
 DECLARE @ManualColumnNotFound INT = 0; 
 DECLARE @DataLineageTestFailed INT = 0;
-DECLARE @DatabaseId INT = 4 -- Declare database_id from dbo.databases appropriate to tested documentation
-DECLARE @TableId INT = 304 -- Declare table_id from dbo.databases appropriate to tested documentation (the main table used for most or all manual objects)
+DECLARE @DatabaseId INT = 25 -- Declare database_id from dbo.databases appropriate to tested documentation
+DECLARE @TableId INT = 1124 -- Declare table_id from dbo.databases appropriate to tested documentation (the main table used for most or all manual objects)
 
 -- Module for databases table
 
@@ -89,7 +89,7 @@ END
 
 CLOSE ObjectCursor;
 DEALLOCATE ObjectCursor;
-
+ 
 --Module for reports table
 
 DECLARE @ReportId INT;
@@ -101,7 +101,7 @@ DECLARE ReportCursor CURSOR FOR
 SELECT [report_id], [name], [object_type]
 FROM [dataedo_meta_upgrade_cs].[dbo].[reports]
 WHERE [database_id] = @DatabaseId
-  AND [report_id] IN (1, 12); -- Declare report_id(s) from dbo.reports appropriate to tested documentation
+  AND [report_id] IN (32); -- Declare report_id(s) from dbo.reports appropriate to tested documentation
 
 -- Loop through reports using a cursor
 -- Fetch next report details
@@ -135,7 +135,6 @@ END
 
 CLOSE ReportCursor;
 DEALLOCATE ReportCursor;
-
  
 -- Module for glossary_mappings table
 
@@ -172,9 +171,9 @@ SELECT TOP 1
     @Source = [source],
     @Status = [status]
 FROM [dataedo_meta_upgrade_cs].[dbo].[tables_relations]
-WHERE [table_relation_id] = 505 -- Declare appropriate ids from dbo.tables_relations appropriate to tested documentation
-    AND [pk_table_id] = 306
-    AND [fk_table_id] = 304
+WHERE [table_relation_id] = 620 -- Declare appropriate ids from dbo.tables_relations appropriate to tested documentation
+    AND [pk_table_id] = 1137
+    AND [fk_table_id] = 1124
     AND [source] = 'USER'
     AND [status] = 'A';
  
@@ -196,7 +195,7 @@ SET @NullFields = '';
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[unique_constraints]
-    WHERE [unique_constraint_id] = 651 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
+    WHERE [unique_constraint_id] = 649 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
     AND [table_id] = @TableId -- Declare appropriate table_id (if different then declared) from dbo.tables appropriate to tested documentation (object that has keys added)
     AND [source] = 'USER'
     AND [primary_key] = 1
@@ -214,7 +213,7 @@ END
 IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[unique_constraints]
-    WHERE [unique_constraint_id] = 652 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
+    WHERE [unique_constraint_id] = 650 -- Declare appropriate unique_constraint_id from dbo.unique_constraints] appropriate to tested documentation
     AND [table_id] = @TableId -- Declare appropriate table_id (if different then declared) from dbo.tables appropriate to tested documentation (object that has keys added)
     AND [source] = 'USER'
     AND [primary_key] = 0
@@ -230,7 +229,7 @@ BEGIN
 END
 
 -- Columns module
-DECLARE @ColumnId INT = 2414; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
+DECLARE @ColumnId INT = 12402; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
 DECLARE @tableColumnId INT = @TableId -- Declare appropriate table_id (if different then declared) from dbo.tables appropriate to tested documentation
 DECLARE @TitleIsNull INT;
 DECLARE @DescriptionIsNull INT;
@@ -332,13 +331,13 @@ BEGIN
 END
 
 -- Module for Data lineage
-DECLARE @LineageProcessId INT = 382; -- Declare appropriate process_id from dbo.data_processes appropriate to tested documentation (search by plain_description)
+DECLARE @LineageProcessId INT = 380; -- Declare appropriate process_id from dbo.data_processes appropriate to tested documentation (search by plain_description)
 DECLARE @ProcessorId INT = @TableId; -- Declare appropriate processor_id (most likely of the mian table change if needed) from dbo.data_processes appropriate to tested documentation
 DECLARE @ExpectedProcessorName NVARCHAR(255) = 'Regression';
-DECLARE @ObjectFlowId1 INT = 971; -- Declare appropriate object_id from dbo.data_flows appropriate to tested documentation
-DECLARE @ObjectFlowId2 INT = 995; -- Declare appropriate object_id from dbo.data_flows appropriate to tested documentation
-DECLARE @InflowId INT = 1407; -- Declare appropriate inflow_id from dbo.data_flows appropriate to tested documentation
-DECLARE @OutflowId INT = 1408; -- Declare appropriate outflow_id from dbo.data_flows appropriate to tested documentation
+DECLARE @ObjectFlowId1 INT = 255; -- Declare appropriate object_id from dbo.data_flows appropriate to tested documentation
+DECLARE @ObjectFlowId2 INT = 275; -- Declare appropriate object_id from dbo.data_flows appropriate to tested documentation
+DECLARE @InflowId INT = 1435; -- Declare appropriate inflow_id from dbo.data_flows appropriate to tested documentation
+DECLARE @OutflowId INT = 671; -- Declare appropriate outflow_id from dbo.data_flows appropriate to tested documentation
 
 -- Check if the lineage process exists in [data_processes]
 -- Display appropriate messages based on the existence of the process
@@ -368,8 +367,8 @@ BEGIN
     END
 
     -- Check for object level flows in [data_flows]
+    -- Same objct cannot be an inflow and an outflow
 	-- Display appropriate messages based on the count of object level flows
-    -- This method will not work if for some reason the same object would be its inflow and outflow 
 
     IF (
         SELECT COUNT(DISTINCT [object_id])
