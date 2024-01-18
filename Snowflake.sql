@@ -187,6 +187,7 @@ END
 ELSE
 BEGIN
     PRINT 'Row not found in tables_relations with specified criteria - TEST FAILED';
+    SET @UnexpectedNulls = @UnexpectedNulls + 1;
 END
  
 -- Module for unique_constraints table
@@ -305,12 +306,14 @@ BEGIN
     ELSE
     BEGIN
         PRINT 'Lookup link not found - TEST FAILED';
+        SET @UnexpectedNulls = @UnexpectedNulls + 1;
     END
 END
 ELSE
 BEGIN
     -- If the initial conditions are not met
     PRINT 'Row not found in columns with specified criteria - TEST FAILED';
+    SET @UnexpectedNulls = @UnexpectedNulls + 1;
 END
 
 -- Check if there is a row with specific conditions in columns table for user-made column
@@ -367,6 +370,7 @@ BEGIN
     ELSE
     BEGIN
         PRINT 'Expected lineage process found with unexpected name - TEST FAILED';
+        SET @DataLineageTestFailed = 1;
     END
 
     -- Check for object level flows in [data_flows]
