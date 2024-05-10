@@ -1,5 +1,8 @@
 --Assertions for Azure SQL 15 documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';

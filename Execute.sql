@@ -1,5 +1,7 @@
 --Assertions for Azure SQL 15 documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -434,6 +436,8 @@ GO
 
 --Assertions for Azure Synapse Analytics documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -818,6 +822,8 @@ END
 GO
 
 --Assertions for Azure Synapse Pipelines documentation to perform after repository upgrade and importing changes
+
+USE dataedo_meta_upgrade_cs;
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
@@ -1253,6 +1259,8 @@ GO
 
 --Assertions for MariaDB documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -1686,6 +1694,8 @@ END
 GO
 
 --Assertions for MySQL 5 documentation to perform after repository upgrade and importing changes
+
+USE dataedo_meta_upgrade_cs;
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
@@ -2121,6 +2131,8 @@ GO
 
 --Assertions for MySQL 8 documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -2554,6 +2566,8 @@ END
 GO
 
 --Assertions for Oracle11g documentation to perform after repository upgrade and importing changes
+
+USE dataedo_meta_upgrade_cs;
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
@@ -2989,6 +3003,8 @@ GO
 
 --Assertions for Oracle23c documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -3423,6 +3439,8 @@ GO
 
 --Assertions for Power BI Report Server documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -3854,6 +3872,8 @@ END
 GO 
 
 --Assertions for PostgreSQL 9 documentation to perform after repository upgrade and importing changes
+
+USE dataedo_meta_upgrade_cs;
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
@@ -4289,6 +4309,8 @@ GO
 
 --Assertions for PostgreSQL 15 documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -4723,6 +4745,8 @@ GO
 
 --Assertions for Power BI documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -5156,6 +5180,8 @@ GO
 
 --Assertions for Power BI Datasets documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -5546,6 +5572,8 @@ END
 GO
 
 --Assertions for Snowflake documentation to perform after repository upgrade and importing changes
+
+USE dataedo_meta_upgrade_cs;
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
@@ -5980,6 +6008,8 @@ END
 GO
 
 --Assertions for SQL Server 2008 documentation to perform after repository upgrade and importing changes
+
+USE dataedo_meta_upgrade_cs;
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
@@ -6423,6 +6453,8 @@ GO
 
 --Assertions for SQL Server 2019 documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -6864,6 +6896,8 @@ GO
 
 --Assertions for Tableau documentation to perform after repository upgrade and importing changes
 
+USE dataedo_meta_upgrade_cs;
+
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
 DECLARE @UnexpectedNullFields NVARCHAR(MAX) = '';
@@ -7295,6 +7329,8 @@ END
 GO
 
 --Assertions for Power Tableau Data Model documentation to perform after repository upgrade and importing changes
+
+USE dataedo_meta_upgrade_cs;
 
 DECLARE @DatabaseNullFields NVARCHAR(MAX);
 DECLARE @TableNullFields NVARCHAR(MAX);
