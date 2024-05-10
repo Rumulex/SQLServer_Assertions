@@ -233,8 +233,8 @@ BEGIN
 END
 
 -- Columns module
-DECLARE @ColumnId INT = 2414; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
-DECLARE @tableColumnId INT = @TableId -- Declare appropriate table_id (if different then declared) from dbo.tables appropriate to tested documentation
+DECLARE @ColumnId INT = 2463; -- Declare appropriate column_id from dbo.columns appropriate to tested documentation
+DECLARE @tableColumnId INT = 1598 -- Declare appropriate table_id (if different then declared) from dbo.tables appropriate to tested documentation
 DECLARE @TitleIsNull INT;
 DECLARE @DescriptionIsNull INT;
 DECLARE @UnexpectedNullFieldsFound INT;
@@ -245,7 +245,7 @@ IF EXISTS (
     SELECT 1
     FROM [dataedo_meta_upgrade_cs].[dbo].[columns] C
     WHERE C.[column_id] = @ColumnId
-      AND C.[table_id] = @tableColumnId
+      AND C.[table_id] = @tableColumnId -- Hard coded because of object migration
       AND C.[status] = 'A'
       AND C.[source] = 'DBMS'
 )
